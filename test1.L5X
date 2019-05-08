@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="30.00" TargetName="test" TargetType="Controller" ContainsContext="false" Owner="Windows User" ExportDate="Tue May 07 23:15:49 2019" ExportOptions="NoRawData L5KData DecoratedData ForceProtectedEncoding AllProjDocTrans">
+<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="30.00" TargetName="test" TargetType="Controller" ContainsContext="false" Owner="Windows User" ExportDate="Tue May 07 23:21:21 2019" ExportOptions="NoRawData L5KData DecoratedData ForceProtectedEncoding AllProjDocTrans">
 <Controller Use="Target" Name="test" ProcessorType="1769-L30ER" MajorRev="30" MinorRev="11" TimeSlice="20" ShareUnusedTimeSlice="1" ProjectCreationDate="Tue May 07 23:15:17 2019" LastModifiedDate="Tue May 07 23:15:21 2019" SFCExecutionControl="CurrentActive" SFCRestartPosition="MostRecent"
  SFCLastScan="DontScan" ProjectSN="16#602c_be10" MatchProjectToController="false" CanUseRPIFromProducer="false" InhibitAutomaticFirmwareUpdate="0" PassThroughConfiguration="EnabledWithAppend" DownloadProjectDocumentationAndExtendedProperties="true" DownloadProjectCustomProperties="true" ReportMinorOverflow="false">
 <RedundancyInfo Enabled="false" KeepTestEditsOnSwitchOver="false" IOMemoryPadPercentage="90" DataTablePadPercentage="50"/>
@@ -1302,20 +1302,25 @@
 <RLLContent>
 <Rung Number="0" Type="N">
 <Text>
-<![CDATA[JSR(test,0);]]>
+<![CDATA[NOP();]]>
 </Text>
 </Rung>
 <Rung Number="1" Type="N">
 <Text>
-<![CDATA[NOP();]]>
+<![CDATA[JSR(test,0);]]>
 </Text>
 </Rung>
 <Rung Number="2" Type="N">
 <Text>
-<![CDATA[CALC_HORZ_TANK(tk1,10,10,5,tk1_gallons);]]>
+<![CDATA[NOP();]]>
 </Text>
 </Rung>
 <Rung Number="3" Type="N">
+<Text>
+<![CDATA[CALC_HORZ_TANK(tk1,10,10,5,tk1_gallons);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
 <Comment>
 <![CDATA[select OnRoad or OffRoad
 ]]>
@@ -1324,7 +1329,7 @@
 <![CDATA[[[XIC(OnRoad_PB) ,XIC(OnRoad_Selected) ] XIO(OffRoad_Selected) OTE(OnRoad_Selected) ,[XIC(OffRoad_PB) ,XIC(OffRoad_Selected) ] XIO(OnRoad_Selected) OTE(OffRoad_Selected) ];]]>
 </Text>
 </Rung>
-<Rung Number="4" Type="N">
+<Rung Number="5" Type="N">
 <Comment>
 <![CDATA[enter diesel user data
 ]]>
@@ -1333,7 +1338,7 @@
 <![CDATA[XIC(Data_Enter_PB)COP(Diesel_User_Number,Current_Diesel_User.user_number,1)COP(Diesel_User_Gallons,Current_Diesel_User.gallons_out,1)COP(Date_Time,Current_Diesel_User.last_Tx,1);]]>
 </Text>
 </Rung>
-<Rung Number="5" Type="N">
+<Rung Number="6" Type="N">
 <Comment>
 <![CDATA[validate operator
 match op number/ok to dispense, disable user zero
@@ -1343,12 +1348,12 @@ match op number/ok to dispense, disable user zero
 <![CDATA[[NEQ(Current_Diesel_User.user_number,0) FSC(Check_Diesel_User,?,?,ALL,Current_Diesel_User.user_number=Diesel_Users[Check_Diesel_User.POS].user_number) ,EQU(0,Current_Diesel_User.user_number) RES(Check_Diesel_User) ];]]>
 </Text>
 </Rung>
-<Rung Number="6" Type="N">
+<Rung Number="7" Type="N">
 <Text>
 <![CDATA[XIC(Check_Diesel_User.FD)OTE(found);]]>
 </Text>
 </Rung>
-<Rung Number="7" Type="N">
+<Rung Number="8" Type="N">
 <Comment>
 <![CDATA[enable pumps
 ]]>
@@ -1357,7 +1362,7 @@ match op number/ok to dispense, disable user zero
 <![CDATA[NOP();]]>
 </Text>
 </Rung>
-<Rung Number="8" Type="N">
+<Rung Number="9" Type="N">
 <Text>
 <![CDATA[XIC(Reset_Diesel_Pump)MOV(0,Current_Diesel_User.user_number)OTU(OnRoad_Selected)OTU(OffRoad_Selected);]]>
 </Text>
