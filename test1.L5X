@@ -1,0 +1,1413 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="30.00" TargetName="test" TargetType="Controller" ContainsContext="false" Owner="Windows User" ExportDate="Tue May 07 23:15:49 2019" ExportOptions="NoRawData L5KData DecoratedData ForceProtectedEncoding AllProjDocTrans">
+<Controller Use="Target" Name="test" ProcessorType="1769-L30ER" MajorRev="30" MinorRev="11" TimeSlice="20" ShareUnusedTimeSlice="1" ProjectCreationDate="Tue May 07 23:15:17 2019" LastModifiedDate="Tue May 07 23:15:21 2019" SFCExecutionControl="CurrentActive" SFCRestartPosition="MostRecent"
+ SFCLastScan="DontScan" ProjectSN="16#602c_be10" MatchProjectToController="false" CanUseRPIFromProducer="false" InhibitAutomaticFirmwareUpdate="0" PassThroughConfiguration="EnabledWithAppend" DownloadProjectDocumentationAndExtendedProperties="true" DownloadProjectCustomProperties="true" ReportMinorOverflow="false">
+<RedundancyInfo Enabled="false" KeepTestEditsOnSwitchOver="false" IOMemoryPadPercentage="90" DataTablePadPercentage="50"/>
+<Security Code="0" ChangesToDetect="16#ffff_ffff_ffff_ffff"/>
+<SafetyInfo/>
+<DataTypes>
+<DataType Name="DateTime" Family="NoFamily" Class="User">
+<Description>
+<![CDATA[Date and TimeOfDay (absolute) or Time (duration/interval)]]>
+</Description>
+<Members>
+<Member Name="Yr" DataType="DINT" Dimension="0" Radix="Decimal" Hidden="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Year(s)]]>
+</Description>
+</Member>
+<Member Name="Mo" DataType="DINT" Dimension="0" Radix="Decimal" Hidden="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Month(s)]]>
+</Description>
+</Member>
+<Member Name="Da" DataType="DINT" Dimension="0" Radix="Decimal" Hidden="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Day(s)]]>
+</Description>
+</Member>
+<Member Name="Hr" DataType="DINT" Dimension="0" Radix="Decimal" Hidden="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Hour(s)]]>
+</Description>
+</Member>
+<Member Name="Min" DataType="DINT" Dimension="0" Radix="Decimal" Hidden="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Minute(s)]]>
+</Description>
+</Member>
+<Member Name="Sec" DataType="DINT" Dimension="0" Radix="Decimal" Hidden="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Second(s)]]>
+</Description>
+</Member>
+<Member Name="uSec" DataType="DINT" Dimension="0" Radix="Decimal" Hidden="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Microsecond(s)]]>
+</Description>
+</Member>
+</Members>
+</DataType>
+<DataType Name="Diesel_User" Family="NoFamily" Class="User">
+<Members>
+<Member Name="user_number" DataType="DINT" Dimension="0" Radix="Decimal" Hidden="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[user number/any 32 bit interger]]>
+</Description>
+</Member>
+<Member Name="gallons_in" DataType="REAL" Dimension="0" Radix="Float" Hidden="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[user gallons filled]]>
+</Description>
+</Member>
+<Member Name="gallons_out" DataType="REAL" Dimension="0" Radix="Float" Hidden="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[user gallons dispenced]]>
+</Description>
+</Member>
+<Member Name="last_Tx" DataType="DateTime" Dimension="0" Radix="NullType" Hidden="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[date and time of last transaction]]>
+</Description>
+</Member>
+</Members>
+</DataType>
+</DataTypes>
+<Modules>
+<Module Name="Local" CatalogNumber="1769-L30ER" Vendor="1" ProductType="14" ProductCode="106" Major="30" Minor="11" ParentModule="Local" ParentModPortId="1" Inhibited="false" MajorFault="true"
+>
+<EKey State="Disabled"/>
+<Ports>
+<Port Id="1" Address="0" Type="Compact" Upstream="false">
+<Bus Size="9"/>
+</Port>
+<Port Id="2" Type="Ethernet" Upstream="false">
+<Bus/>
+</Port>
+</Ports>
+</Module>
+</Modules>
+<AddOnInstructionDefinitions>
+<AddOnInstructionDefinition Name="CALC_HORZ_TANK" Revision="1.0" Vendor="truvision" ExecutePrescan="false" ExecutePostscan="false" ExecuteEnableInFalse="false" CreatedDate="2019-05-04T00:40:35.607Z" CreatedBy="LAPTOP-NKRCJQBG\TVS Programmer" EditedDate="2019-05-06T16:02:56.242Z" EditedBy="LAPTOP-NKRCJQBG\TVS Programmer" SoftwareRevision="v30.00"
+>
+<Description>
+<![CDATA[Gallons in a Horizontal Tank]]>
+</Description>
+<AdditionalHelpText>
+<![CDATA[Add on instruction to calculate the gallons in a cylindrical horizontal tank, based on the diameter of the tank, the length of the tank, and the distance from the surface of the liquid to the top of the tank.]]>
+</AdditionalHelpText>
+<Parameters>
+<Parameter Name="EnableIn" TagType="Base" DataType="BOOL" Usage="Input" Radix="Decimal" Required="false" Visible="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Enable Input - System Defined Parameter]]>
+</Description>
+</Parameter>
+<Parameter Name="EnableOut" TagType="Base" DataType="BOOL" Usage="Output" Radix="Decimal" Required="false" Visible="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Enable Output - System Defined Parameter]]>
+</Description>
+</Parameter>
+<Parameter Name="cyl_dia" TagType="Base" DataType="REAL" Usage="Input" Radix="Float" Required="true" Visible="true" ExternalAccess="Read/Write">
+<DefaultData Format="L5K">
+<![CDATA[0.00000000e+000]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="0.0"/>
+</DefaultData>
+</Parameter>
+<Parameter Name="cyl_len" TagType="Base" DataType="REAL" Usage="Input" Radix="Float" Required="true" Visible="true" ExternalAccess="Read/Write">
+<DefaultData Format="L5K">
+<![CDATA[0.00000000e+000]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="0.0"/>
+</DefaultData>
+</Parameter>
+<Parameter Name="dist" TagType="Base" DataType="REAL" Usage="Input" Radix="Float" Required="true" Visible="true" ExternalAccess="Read/Write">
+<DefaultData Format="L5K">
+<![CDATA[0.00000000e+000]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="0.0"/>
+</DefaultData>
+</Parameter>
+<Parameter Name="gal" TagType="Base" DataType="REAL" Usage="InOut" Radix="Float" Required="true" Visible="true" Constant="false"/>
+</Parameters>
+<LocalTags>
+<LocalTag Name="al" DataType="REAL" Radix="Float" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[0.00000000e+000]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="0.0"/>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="vol" DataType="REAL" Radix="Float" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[0.00000000e+000]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="0.0"/>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="cyl_rad" DataType="REAL" Radix="Float" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[0.00000000e+000]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="0.0"/>
+</DefaultData>
+</LocalTag>
+</LocalTags>
+<Routines>
+<Routine Name="Logic" Type="ST">
+<STContent>
+<Line Number="0">
+<![CDATA[cyl_rad:=cyl_dia/2;]]>
+</Line>
+<Line Number="1">
+<![CDATA[al:=3.1415*cyl_rad**2-cyl_rad**2*ACOS((cyl_rad-dist)/cyl_rad)+(cyl_rad-dist)*SQRT(2*cyl_rad*dist-dist**2);]]>
+</Line>
+<Line Number="2">
+<![CDATA[vol:=al*cyl_len;]]>
+</Line>
+<Line Number="3">
+<![CDATA[gal:=vol*7.48052;]]>
+</Line>
+</STContent>
+</Routine>
+</Routines>
+</AddOnInstructionDefinition>
+</AddOnInstructionDefinitions>
+<Tags>
+<Tag Name="al" TagType="Base" DataType="REAL" Radix="Float" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[tank end cap area output]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[3.92300949e+001]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="39.230095"/>
+</Data>
+</Tag>
+<Tag Name="always_off" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Check_Diesel_User" TagType="Base" DataType="CONTROL" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[[0,50,0]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="CONTROL">
+<DataValueMember Name="LEN" DataType="DINT" Radix="Decimal" Value="50"/>
+<DataValueMember Name="POS" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="EU" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="EM" DataType="BOOL" Value="0"/>
+<DataValueMember Name="ER" DataType="BOOL" Value="0"/>
+<DataValueMember Name="UL" DataType="BOOL" Value="0"/>
+<DataValueMember Name="IN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="FD" DataType="BOOL" Value="0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="Current_Diesel_User" TagType="Base" DataType="Diesel_User" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="cyl_h" TagType="Base" DataType="REAL" Radix="Float" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[distance from the top of tank to the liquid]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[5.00000000e+000]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="5.0"/>
+</Data>
+</Tag>
+<Tag Name="cyl_rad" TagType="Base" DataType="REAL" Radix="Float" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[tank drum radius]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[5.00000000e+000]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="5.0"/>
+</Data>
+</Tag>
+<Tag Name="Data_Enter_PB" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Date_Time" TagType="Base" DataType="DateTime" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[[0,0,0,0,0,0,0]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="Diesel_Users" TagType="Base" DataType="Diesel_User" Dimensions="50" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[[[100,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[200,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[300
+					,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[400,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[500,0.00000000e+000
+					,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000
+					,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0
+					,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000
+					,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000
+					,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0
+					,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000
+					,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000
+					,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0
+					,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000
+					,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000
+					,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0
+					,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000
+					,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000
+					,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0
+					,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000
+					,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000
+					,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0
+					,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000
+					,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000
+					,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]]]]]>
+</Data>
+<Data Format="Decorated">
+<Array DataType="Diesel_User" Dimensions="50">
+<Element Index="[0]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="100"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[1]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="200"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[2]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="300"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[3]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="400"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[4]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="500"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[5]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[6]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[7]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[8]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[9]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[10]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[11]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[12]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[13]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[14]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[15]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[16]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[17]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[18]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[19]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[20]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[21]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[22]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[23]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[24]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[25]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[26]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[27]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[28]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[29]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[30]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[31]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[32]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[33]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[34]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[35]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[36]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[37]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[38]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[39]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[40]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[41]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[42]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[43]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[44]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[45]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[46]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[47]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[48]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+<Element Index="[49]">
+<Structure DataType="Diesel_User">
+<DataValueMember Name="user_number" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="gallons_in" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="gallons_out" DataType="REAL" Radix="Float" Value="0.0"/>
+<StructureMember Name="last_Tx" DataType="DateTime">
+<DataValueMember Name="Yr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Mo" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Da" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Hr" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Min" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Sec" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="uSec" DataType="DINT" Radix="Decimal" Value="0"/>
+</StructureMember>
+</Structure>
+</Element>
+</Array>
+</Data>
+</Tag>
+<Tag Name="Diesel_User_Gallons" TagType="Base" DataType="REAL" Radix="Float" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[0.00000000e+000]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="0.0"/>
+</Data>
+</Tag>
+<Tag Name="Diesel_User_Number" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="found" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="gal" TagType="Base" DataType="REAL" Radix="Float" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[volume output in gallons]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[2.93461523e+003]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="2934.6152"/>
+</Data>
+</Tag>
+<Tag Name="hi" TagType="Base" DataType="REAL" Radix="Float" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[5.00000000e+000]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="5.0"/>
+</Data>
+</Tag>
+<Tag Name="le" TagType="Base" DataType="REAL" Radix="Float" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[1.00000000e+001]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="10.0"/>
+</Data>
+</Tag>
+<Tag Name="length" TagType="Base" DataType="REAL" Radix="Float" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[length of tank]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[1.00000000e+001]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="10.0"/>
+</Data>
+</Tag>
+<Tag Name="OffRoad_PB" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="OffRoad_Selected" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="OnRoad_PB" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="OnRoad_Selected" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="pi" TagType="Base" DataType="REAL" Radix="Float" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[constant pi]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[3.14000010e+000]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="3.14"/>
+</Data>
+</Tag>
+<Tag Name="ra" TagType="Base" DataType="REAL" Radix="Float" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[1.00000000e+001]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="10.0"/>
+</Data>
+</Tag>
+<Tag Name="Reset_Diesel_Pump" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="stuff" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="tk" TagType="Base" DataType="CALC_HORZ_TANK" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[[1,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="CALC_HORZ_TANK">
+<DataValueMember Name="EnableIn" DataType="BOOL" Value="1"/>
+<DataValueMember Name="EnableOut" DataType="BOOL" Value="0"/>
+<DataValueMember Name="cyl_dia" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="cyl_len" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="dist" DataType="REAL" Radix="Float" Value="0.0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="tk1" TagType="Base" DataType="CALC_HORZ_TANK" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[[3,1.00000000e+001,1.00000000e+001,5.00000000e+000,3.92675858e+001,3.92675842e+002,5.00000000e+000
+					]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="CALC_HORZ_TANK">
+<DataValueMember Name="EnableIn" DataType="BOOL" Value="1"/>
+<DataValueMember Name="EnableOut" DataType="BOOL" Value="1"/>
+<DataValueMember Name="cyl_dia" DataType="REAL" Radix="Float" Value="10.0"/>
+<DataValueMember Name="cyl_len" DataType="REAL" Radix="Float" Value="10.0"/>
+<DataValueMember Name="dist" DataType="REAL" Radix="Float" Value="5.0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="tk1_gallons" TagType="Base" DataType="REAL" Radix="Float" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[2.93741943e+003]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="2937.4194"/>
+</Data>
+</Tag>
+<Tag Name="vol" TagType="Base" DataType="REAL" Radix="Float" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[volume output in cubic feet]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[3.92300964e+002]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="392.30096"/>
+</Data>
+</Tag>
+</Tags>
+<Programs>
+<Program Name="MainProgram" TestEdits="false" MainRoutineName="MainRoutine" Disabled="false" UseAsFolder="false">
+<Tags/>
+<Routines>
+<Routine Name="MainRoutine" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[JSR(test,0);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[NOP();]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[CALC_HORZ_TANK(tk1,10,10,5,tk1_gallons);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Comment>
+<![CDATA[select OnRoad or OffRoad
+]]>
+</Comment>
+<Text>
+<![CDATA[[[XIC(OnRoad_PB) ,XIC(OnRoad_Selected) ] XIO(OffRoad_Selected) OTE(OnRoad_Selected) ,[XIC(OffRoad_PB) ,XIC(OffRoad_Selected) ] XIO(OnRoad_Selected) OTE(OffRoad_Selected) ];]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Comment>
+<![CDATA[enter diesel user data
+]]>
+</Comment>
+<Text>
+<![CDATA[XIC(Data_Enter_PB)COP(Diesel_User_Number,Current_Diesel_User.user_number,1)COP(Diesel_User_Gallons,Current_Diesel_User.gallons_out,1)COP(Date_Time,Current_Diesel_User.last_Tx,1);]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Comment>
+<![CDATA[validate operator
+match op number/ok to dispense, disable user zero
+]]>
+</Comment>
+<Text>
+<![CDATA[[NEQ(Current_Diesel_User.user_number,0) FSC(Check_Diesel_User,?,?,ALL,Current_Diesel_User.user_number=Diesel_Users[Check_Diesel_User.POS].user_number) ,EQU(0,Current_Diesel_User.user_number) RES(Check_Diesel_User) ];]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Text>
+<![CDATA[XIC(Check_Diesel_User.FD)OTE(found);]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Comment>
+<![CDATA[enable pumps
+]]>
+</Comment>
+<Text>
+<![CDATA[NOP();]]>
+</Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Text>
+<![CDATA[XIC(Reset_Diesel_Pump)MOV(0,Current_Diesel_User.user_number)OTU(OnRoad_Selected)OTU(OffRoad_Selected);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="test" Type="ST">
+<STContent>
+<Line Number="0">
+<![CDATA[]]>
+</Line>
+<Line Number="1">
+<![CDATA[al:=pi*cyl_rad**2-cyl_rad**2*ACOS((cyl_rad-cyl_h)/cyl_rad)+(cyl_rad-cyl_h)*SQRT(2*cyl_rad*cyl_h-cyl_h**2);]]>
+</Line>
+<Line Number="2">
+<![CDATA[vol:=al*length;]]>
+</Line>
+<Line Number="3">
+<![CDATA[gal:=vol*7.48052;]]>
+</Line>
+<Line Number="4">
+<![CDATA[]]>
+</Line>
+<Line Number="5">
+<![CDATA[]]>
+</Line>
+<Line Number="6">
+<![CDATA[]]>
+</Line>
+</STContent>
+</Routine>
+</Routines>
+</Program>
+</Programs>
+<Tasks>
+<Task Name="MainTask" Type="CONTINUOUS" Priority="10" Watchdog="500" DisableUpdateOutputs="false" InhibitTask="false">
+<ScheduledPrograms>
+<ScheduledProgram Name="MainProgram"/>
+</ScheduledPrograms>
+</Task>
+</Tasks>
+<CST MasterID="0"/>
+<WallClockTime LocalTimeAdjustment="0" TimeZone="0"/>
+<Trends/>
+<DataLogs/>
+<TimeSynchronize Priority1="128" Priority2="128" PTPEnable="false"/>
+<EthernetPorts>
+<EthernetPort Port="1" Label="1" PortEnabled="true"/>
+<EthernetPort Port="2" Label="2" PortEnabled="true"/>
+</EthernetPorts>
+<EthernetNetwork SupervisorModeEnabled="false" SupervisorPrecedence="0" BeaconInterval="400" BeaconTimeout="1960" VLANID="0"/>
+</Controller>
+</RSLogix5000Content>
