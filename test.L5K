@@ -1,0 +1,269 @@
+﻿(*********************************************
+
+  Import-Export
+  Version   := RSLogix 5000 v30.00
+  Owner     := Windows User, 
+  Exported  := Tue May  7 22:52:48 2019
+
+  Note:  File encoded in UTF-8.  Only edit file in a program 
+         which supports UTF-8 (like Notepad, not Wordpad).
+
+**********************************************)
+IE_VER := 2.21;
+
+CONTROLLER test (ProcessorType := "1769-L30ER",
+                 Major := 30,
+                 TimeSlice := 20,
+                 ShareUnusedTimeSlice := 1,
+                 RedundancyEnabled := 0,
+                 KeepTestEditsOnSwitchOver := 0,
+                 DataTablePadPercentage := 50,
+                 SecurityCode := 0,
+                 ChangesToDetect := 16#ffff_ffff_ffff_ffff,
+                 SFCExecutionControl := "CurrentActive",
+                 SFCRestartPosition := "MostRecent",
+                 SFCLastScan := "DontScan",
+                 SerialNumber := 16#602c_be10,
+                 MatchProjectToController := No,
+                 CanUseRPIFromProducer := No,
+                 InhibitAutomaticFirmwareUpdate := 0,
+                 PassThroughConfiguration := EnabledWithAppend,
+                 DownloadProjectDocumentationAndExtendedProperties := Yes,
+                 ReportMinorOverflow := 0)
+	DATATYPE DateTime (Description := "Date and TimeOfDay (absolute) or Time (duration/interval)",
+	                   FamilyType := NoFamily)
+		DINT Yr (Description := "Year(s)");
+		DINT Mo (Description := "Month(s)");
+		DINT Da (Description := "Day(s)");
+		DINT Hr (Description := "Hour(s)");
+		DINT Min (Description := "Minute(s)");
+		DINT Sec (Description := "Second(s)");
+		DINT uSec (Description := "Microsecond(s)");
+	END_DATATYPE
+
+	DATATYPE Diesel_User (FamilyType := NoFamily)
+		DINT user_number (Description := "user number/any 32 bit interger");
+		REAL gallons_in (Description := "user gallons filled");
+		REAL gallons_out (Description := "user gallons dispenced");
+		DateTime last_Tx (Description := "date and time of last transaction");
+	END_DATATYPE
+
+	MODULE Local (Parent := "Local",
+	              ParentModPortId := 1,
+	              CatalogNumber := "1769-L30ER",
+	              Vendor := 1,
+	              ProductType := 14,
+	              ProductCode := 106,
+	              Major := 30,
+	              Minor := 11,
+	              PortLabel := "RxBACKPLANE",
+	              ChassisSize := 9,
+	              Slot := 0,
+	              Mode := 2#0000_0000_0000_0001,
+	              CompatibleModule := 0,
+	              KeyMask := 2#0000_0000_0000_0000)
+	END_MODULE
+
+	ADD_ON_INSTRUCTION_DEFINITION CALC_HORZ_TANK (Description := "Gallons in a Horizontal Tank",
+	                                              Revision := "1.0",
+	                                              Vendor := "truvision",
+	                                              ExecutePrescan := No,
+	                                              ExecutePostscan := No,
+	                                              ExecuteEnableInFalse := No,
+	                                              CreatedDate := "2019-05-04T00:40:35.607Z",
+	                                              CreatedBy := "LAPTOP-NKRCJQBG\TVS Programmer",
+	                                              EditedDate := "2019-05-06T16:02:56.242Z",
+	                                              EditedBy := "LAPTOP-NKRCJQBG\TVS Programmer",
+	                                              SoftwareRevision := "v30.00",
+	                                              AdditionalHelpText := "Add on instruction to calculate the gallons in a cylindrical horizontal tank, based on the diameter of the tank, the length of the tank, and the distance from the surface of the liquid to the top of the tank.")
+		PARAMETERS
+			EnableIn : BOOL (Description := "Enable Input - System Defined Parameter",
+			                    Usage := Input,
+			                    RADIX := Decimal,
+			                    Required := No,
+			                    Visible := No,
+			                    ExternalAccess := Read Only);
+			EnableOut : BOOL (Description := "Enable Output - System Defined Parameter",
+			                     Usage := Output,
+			                     RADIX := Decimal,
+			                     Required := No,
+			                     Visible := No,
+			                     ExternalAccess := Read Only);
+			cyl_dia : REAL (Usage := Input,
+			                   RADIX := Float,
+			                   Required := Yes,
+			                   Visible := Yes,
+			                   DefaultData := 0.00000000e+000);
+			cyl_len : REAL (Usage := Input,
+			                   RADIX := Float,
+			                   Required := Yes,
+			                   Visible := Yes,
+			                   DefaultData := 0.00000000e+000);
+			dist : REAL (Usage := Input,
+			                RADIX := Float,
+			                Required := Yes,
+			                Visible := Yes,
+			                DefaultData := 0.00000000e+000);
+			gal : REAL (Usage := InOut,
+			               RADIX := Float,
+			               Required := Yes,
+			               Visible := Yes);
+		END_PARAMETERS
+
+		LOCAL_TAGS
+			al : REAL (RADIX := Float,
+			             ExternalAccess := None,
+			             DefaultData := 0.00000000e+000);
+			vol : REAL (RADIX := Float,
+			              ExternalAccess := None,
+			              DefaultData := 0.00000000e+000);
+			cyl_rad : REAL (RADIX := Float,
+			                  ExternalAccess := None,
+			                  DefaultData := 0.00000000e+000);
+		END_LOCAL_TAGS
+
+		ST_ROUTINE Logic 
+			'cyl_rad:=cyl_dia/2;
+			'al:=3.1415*cyl_rad**2-cyl_rad**2*ACOS((cyl_rad-dist)/cyl_rad)+(cyl_rad-dist)*SQRT(2*cyl_rad*dist-dist**2);
+			'vol:=al*cyl_len;
+			'gal:=vol*7.48052;
+		END_ST_ROUTINE
+
+	END_ADD_ON_INSTRUCTION_DEFINITION
+
+	TAG
+		al : REAL (Description := "tank end cap area output",
+		            RADIX := Float) := 3.92300949e+001;
+		always_off : BOOL (RADIX := Decimal) := 0;
+		Check_Diesel_User : CONTROL  := [0,50,0];
+		Current_Diesel_User : Diesel_User  := [0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]];
+		cyl_h : REAL (Description := "distance from the top of tank to the liquid",
+		            RADIX := Float) := 5.00000000e+000;
+		cyl_rad : REAL (Description := "tank drum radius",
+		            RADIX := Float) := 5.00000000e+000;
+		Data_Enter_PB : BOOL (RADIX := Decimal) := 0;
+		Date_Time : DateTime  := [0,0,0,0,0,0,0];
+		Diesel_Users : Diesel_User[50]  := [[100,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[200,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[300
+				,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[400,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[500,0.00000000e+000
+				,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000
+				,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0
+				,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000
+				,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000
+				,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0
+				,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000
+				,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000
+				,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0
+				,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000
+				,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000
+				,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0
+				,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000
+				,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000
+				,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0
+				,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000
+				,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000
+				,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0
+				,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000
+				,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000
+				,[0,0,0,0,0,0,0]],[0,0.00000000e+000,0.00000000e+000,[0,0,0,0,0,0,0]]];
+		Diesel_User_Gallons : REAL (RADIX := Float) := 0.00000000e+000;
+		Diesel_User_Number : DINT (RADIX := Decimal) := 0;
+		found : BOOL (RADIX := Decimal) := 0;
+		gal : REAL (Description := "volume output in gallons",
+		            RADIX := Float) := 2.93461523e+003;
+		hi : REAL (RADIX := Float) := 5.00000000e+000;
+		le : REAL (RADIX := Float) := 1.00000000e+001;
+		length : REAL (Description := "length of tank",
+		            RADIX := Float) := 1.00000000e+001;
+		OffRoad_PB : BOOL (RADIX := Decimal) := 0;
+		OffRoad_Selected : BOOL (RADIX := Decimal) := 0;
+		OnRoad_PB : BOOL (RADIX := Decimal) := 0;
+		OnRoad_Selected : BOOL (RADIX := Decimal) := 0;
+		pi : REAL (Description := "constant pi",
+		            RADIX := Float) := 3.14000010e+000;
+		ra : REAL (RADIX := Float) := 1.00000000e+001;
+		Reset_Diesel_Pump : BOOL (RADIX := Decimal) := 0;
+		stuff : BOOL (RADIX := Decimal) := 1;
+		tk : CALC_HORZ_TANK  := [1,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+				];
+		tk1 : CALC_HORZ_TANK  := [3,1.00000000e+001,1.00000000e+001,5.00000000e+000,3.92675858e+001,3.92675842e+002,5.00000000e+000
+				];
+		tk1_gallons : REAL (RADIX := Float) := 2.93741943e+003;
+		vol : REAL (Description := "volume output in cubic feet",
+		            RADIX := Float) := 3.92300964e+002;
+	END_TAG
+
+	PROGRAM MainProgram (MAIN := "MainRoutine",
+	                     MODE := 0,
+	                     DisableFlag := 0,
+	                     UseAsFolder := 0)
+		TAG
+		END_TAG
+
+		ROUTINE MainRoutine 
+				N: JSR(test,0);
+				N: NOP();
+				N: CALC_HORZ_TANK(tk1,10,10,5,tk1_gallons);
+				RC: "select OnRoad or OffRoad$N"
+				    "";
+				N: [[XIC(OnRoad_PB) ,XIC(OnRoad_Selected) ] XIO(OffRoad_Selected) OTE(OnRoad_Selected) ,[XIC(OffRoad_PB) ,XIC(OffRoad_Selected) ] XIO(OnRoad_Selected) OTE(OffRoad_Selected) ];
+				RC: "enter diesel user data$N"
+				    "";
+				N: XIC(Data_Enter_PB)COP(Diesel_User_Number,Current_Diesel_User.user_number,1)COP(Diesel_User_Gallons,Current_Diesel_User.gallons_out,1)COP(Date_Time,Current_Diesel_User.last_Tx,1);
+				RC: "validate operator$N"
+				    "match op number/ok to dispense, disable user zero$N"
+				    "";
+				N: [NEQ(Current_Diesel_User.user_number,0) FSC(Check_Diesel_User,?,?,ALL,Current_Diesel_User.user_number=Diesel_Users[Check_Diesel_User.POS].user_number) ,EQU(0,Current_Diesel_User.user_number) RES(Check_Diesel_User) ];
+				N: XIC(Check_Diesel_User.FD)OTE(found);
+				RC: "enable pumps$N"
+				    "";
+				N: NOP();
+				N: XIC(Reset_Diesel_Pump)MOV(0,Current_Diesel_User.user_number)OTU(OnRoad_Selected)OTU(OffRoad_Selected);
+		END_ROUTINE
+
+		ST_ROUTINE test 
+			'
+			'al:=pi*cyl_rad**2-cyl_rad**2*ACOS((cyl_rad-cyl_h)/cyl_rad)+(cyl_rad-cyl_h)*SQRT(2*cyl_rad*cyl_h-cyl_h**2);
+			'vol:=al*length;
+			'gal:=vol*7.48052;
+			'
+			'
+			'
+		END_ST_ROUTINE
+
+		CHILD_PROGRAMS
+		END_CHILD_PROGRAMS
+
+	END_PROGRAM
+
+	TASK MainTask (Type := CONTINUOUS,
+	               Rate := 10,
+	               Priority := 10,
+	               Watchdog := 500,
+	               DisableUpdateOutputs := No,
+	               InhibitTask := No)
+			MainProgram;
+	END_TASK
+
+CONFIG CST(SystemTimeMasterID := 0) END_CONFIG
+
+CONFIG EthernetNetwork(SupervisorModeEnabled := 0,
+	                                 SupervisorPrecedence := 0,
+	                                 BeaconInterval := 400,
+	                                 BeaconTimeout := 1960,
+	                                 VLANID := 0) END_CONFIG
+
+CONFIG EthernetPort1(Label := "1",
+	                             PortEnabled := 1) END_CONFIG
+
+CONFIG EthernetPort2(Label := "2",
+	                             PortEnabled := 1) END_CONFIG
+
+CONFIG TimeSynchronize(Priority1 := 128,
+	                                 Priority2 := 128,
+	                                 PTPEnable := 0) END_CONFIG
+
+CONFIG WallClockTime(LocalTimeAdjustment := 0,
+	                     TimeZone := 0) END_CONFIG
+
+END_CONTROLLER
+
